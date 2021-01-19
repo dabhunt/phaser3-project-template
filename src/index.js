@@ -1,7 +1,7 @@
-import Phaser from 'phaser';
-import logoImg from './assets/logo.png';
-
-class MyGame extends Phaser.Scene
+import Phaser from 'phaser'
+import LoadingScreen from './scenes/LoadingScreen'
+import Game from './scenes/Game'
+class main extends Phaser.Scene
 {
     constructor ()
     {
@@ -10,38 +10,34 @@ class MyGame extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('logo', logoImg);
     }
       
     create ()
     {
-      const logo = this.add.image(1920/2, 1280/2, 'logo');
-      logo.scale =.2;
-        this.tweens.add({
-            targets: logo,
-            y: 250,
-            duration: 2000,
-            ease: "Power2",
-            yoyo: true,
-            loop: -1
-        });
-        this.tweens.add({
-            targets: logo,
-            scale: .4,
-            duration: 2000,
-            ease: "Power2",
-            yoyo: true,
-            loop: -1
-        });
+     
     }
 }
 
 const config = {
     type: Phaser.AUTO,
-    parent: 'phaser-example',
+    parent: 'phaser-game',
     width: 1920,
     height: 1280,
-    scene: MyGame
+    physics:{ 
+        default: 'arcade',
+        arcade: 
+        {
+            gravity: {y: 0},
+            //gravity: {y: 300},
+            //debug: true
+        }
+    }
+
+    //note: scenes can be overlayed on top of eachother, so we can use them as windows
 };
 
 const game = new Phaser.Game(config);
+game.scene.add('loadingscreen', LoadingScreen);
+game.scene.add('game', Game);
+//game.scene.start('loadingscreen');
+game.scene.start('game');

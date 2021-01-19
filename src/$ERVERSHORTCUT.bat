@@ -1,3 +1,2 @@
-@echo off
-cd ..
-py -m http.server
+@echo on
+npm run start

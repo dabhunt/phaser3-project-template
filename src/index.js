@@ -15,11 +15,19 @@ class MyGame extends Phaser.Scene
       
     create ()
     {
-        const logo = this.add.image(400, 150, 'logo');
-      
+      const logo = this.add.image(1920/2, 1280/2, 'logo');
+      logo.scale =.2;
         this.tweens.add({
             targets: logo,
-            y: 450,
+            y: 250,
+            duration: 2000,
+            ease: "Power2",
+            yoyo: true,
+            loop: -1
+        });
+        this.tweens.add({
+            targets: logo,
+            scale: .4,
             duration: 2000,
             ease: "Power2",
             yoyo: true,
@@ -31,8 +39,8 @@ class MyGame extends Phaser.Scene
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
-    height: 600,
+    width: 1920,
+    height: 1280,
     scene: MyGame
 };
 

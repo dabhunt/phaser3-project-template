@@ -17,7 +17,7 @@ var LegendaryChance = function (scene, text, type, rarity)
     var chance = chanceCap;
     //connect to proton API to determine how many legends of each type are in circulation, vs unmined
     //connect to proton API to determine how many were created and destroyed in the past 24 hours
-    var minableRatio = minableElements / circulatingElements + 1 ; //first check supply
+    var minableRatio = minableElements / (circulatingElements + 1) ; //first check supply
     var destroyRatio = 1 + elementsDestroyed / elementsCreated + 1; //the more destroyed, the better the economy flows
     // if more than 50% of the supply is still unmined, or the destroyRatio exceeds 1.2, return the max value of .5
     if (minableRatio > chanceCap || destroyRatio > (1 + destroyBuffer)) //50% of minable supply vs 20% buffer on top of 1:1 destroyRatio
@@ -25,28 +25,16 @@ var LegendaryChance = function (scene, text, type, rarity)
     chance = minableRatio * destroyRatio * 2;
     if (chance > chanceCap)
         chance = chanceCap //if chance greater than 50% cap, return 50%
-
-
-    //amount of luck you have, divided by 10
-    //ex .1 = .1/.1;
-    //.1 * 1 = .1
-    // 3 = .3/.1;
-    //3 * .577 = 
-    //example values
-    // 150% luck bonus
-    // 
-
     //luckMulti = luckBonusPercent/.1; 
-    if (luckBonusPercent > 1)
-    {
-        var bonus = (Math.pow(luckBonusPercent, 2)-1) / (Math.pow(luckBonusPercent, 2)+1)
-        var bonus = 1 + bonus; // to make the percent back into a multiplier
-        chance = chance + bonus;
-    }
+    
+    //opted to not use this interpretation of luck
+
+    // if (luckBonusPercent > 1)
+    // {
+    //     var bonus = (Math.pow(luckBonusPercent, 2)-1) / (Math.pow(luckBonusPercent, 2)+1)
+    //     var bonus = 1 + bonus; // to make the percent back into a multiplier
+    //     chance = chance + bonus;
+    // }
     return chance; 
 
-}
-var CalcLuckBonus = function()
-{
-    return
 }

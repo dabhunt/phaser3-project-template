@@ -27,7 +27,8 @@ var LegendaryChance = function (scene, text, type, rarity)
         chance = chanceCap //if chance greater than 50% cap, return 50%
     //luckMulti = luckBonusPercent/.1; 
     
-    //opted to not use this interpretation of luck
+    //opted to not use this interpretation of luck because of how complex it makes 
+    //combining element chances
 
     // if (luckBonusPercent > 1)
     // {

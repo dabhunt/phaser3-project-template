@@ -56,17 +56,63 @@ const RandomInt = Phaser.Math.Between;
 // 	Rarity = 2;
 // };
 //based on the rarity of the element, assign the likelyhood of getting additional Stat bonuses
+
+function CombineElements(elementInput,blueprint)
+{
+	avgLuckBonus = 0;
+	avgMagnetBonus= 0;
+	avgBurnBonus = 0;
+	avgDrillBonus = 0;
+	sumLuckBonus = 0;
+	sumMagnetBonus = 0;
+	sumBurnBonus = 0;
+	sumDrillBonus = 0;
+	//loop through each input element, adding the bonuses together for a sum
+	array.forEach(elementInput => {
+
+	});
+	let bonus = [
+		{
+			name: "Luck",
+			amount: 0, //0% bonus
+		},
+		{
+			name: "Magnet",
+			amount: 0, 
+		},
+		{
+			name: "Burn",
+			amount: 0, 
+		},
+		{
+			name: "Drill",
+			amount: 0, 
+		},
+		
+	]
+	let element = {
+		name: "Gold",
+		symbol: "Au",
+		type: "Metal",
+		bonuses: bonus,
+	}
+	return newElement;
+}
+function Element()
+{
+
+}
 switch(newElement.Rarity)
 {
 	case 0:
 	//common
 	chanceToReroll = .10;//10%
-	minReroll = 1;
+	minReroll = 1; //how many stat rolls are guaranteed
 		break;
 	case 1:
 	//unusual
 	chanceToReroll = .15;//15%
-	minReroll = 2;
+	minReroll = 2;  //how many stat rolls are guaranteed
 		break;
 	case 2:
 	//rare
@@ -95,6 +141,6 @@ While (statRolls < minReroll || rng < chanceToReroll)
 	newElement = {
 		Luck: newElement.Luck + .1,
 		ChargeHours: newElement.ChargeHours + .1,
-		MagnetismMinutes : 1/10;
+		MagnetismMinutes : 1/10
 	};
 }

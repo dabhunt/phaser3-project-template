@@ -5,17 +5,26 @@ import elementJs, { GetRandomType } from '../js/element.js'
 import * as elemDict from '../js/elemDictionary.js'
 import particle from '../assets/img/circle.png'
 import logoImg from '../assets/img/logo.png'
+import slotbg from '../assets/img/slot_background.png'
+import Anchor from 'phaser3-rex-plugins/plugins/anchor.js';
+
+
+const Random = Phaser.Math.Between;
+
+const COLOR_PRIMARY = 0x4e342e;
+const COLOR_LIGHT = 0x7b5e57;
+const COLOR_DARK = 0x260e04;
 var logoX = 55;
 var logoY = 50;
 const slidingDeceleration = 10000;
 const backDeceleration = 2000;
-export default class LoadingScreen extends Phaser.Scene
+export default class Main extends Phaser.Scene
 {
-
-
     preload() {
         var url;
-  
+        this.load.image('particle', particle);
+        this.load.image('logo', logoImg);  
+        this.load.image('slot_background', slotbg);
         url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexgridtableplugin.min.js';
         this.load.plugin('rexgridtableplugin', url, true);
         url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexscrollerplugin.min.js';
@@ -25,42 +34,38 @@ export default class LoadingScreen extends Phaser.Scene
         this.load.plugin('rexsliderplugin', url, true);  
   
         url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/white-dot.png';      
-        this.load.image('dot', url);      
-        ///////
-        this.load.plugin('rexgridtableplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexgridtableplugin.min.js', true);
-        //this.load.image('ball', 'assets/sprites/shinyball.png');
-        this.load.image('particle', particle);
-        this.load.image('logo', logoImg);  
+        this.load.image('dot', url);        
     }
 
     create() {
-        
         var newCellObject = function (scene, cell) {
-            var bg = scene.add.graphics()
-                .fillStyle(0x555555)
-                .fillRect(6, 6, 100 - 6, 100 - 6);
-            var txt = scene.add.text(5, 5, cell.index);
+            //var bg = scene.add.graphics()
+                //.fillStyle(0x555555)
+                //.fillRect(6, 6, 100 - 6, 100 - 6);
+            //var bg = scene.add.graphics().fill
+            var bg = scene.add.image(50, 50, 'slot_background',cell.index+1).setScale(.5, .5);
+            var txt = scene.add.text(5, 5, cell.index+1);
             var container = scene.add.container(0, 0, [bg, txt]);
             return container;
         }
-
         var onCellVisible = function (cell) {
             cell.setContainer(newCellObject(this, cell));
             //console.log('Cell ' + cell.index + ' visible');
         };
-        var table = this.add.rexGridTable(800, 450, 1100, 700, {
+        var table = this.add.rexGridTable(800, 350, 1100, 490, {
             cellWidth: 100,
             cellHeight: 100,
-            cellsCount: 100,
-            columns: 20,
+            cellsCount: 150,
+            columns: 10,
             cellVisibleCallback: onCellVisible.bind(this),
             clamplTableOXY: false
         });
-
+        /*
         // draw bound
         this.add.graphics()
-            .lineStyle(3, 0xff0000)
+            .lineStyle(3, 0xffffff)
             .strokeRectShape(table.getBounds());
+        */
 
         // drag table content
         table.scroller = this.plugins.get('rexscrollerplugin').add(table, {
@@ -91,7 +96,7 @@ export default class LoadingScreen extends Phaser.Scene
         });
 
         this.add.graphics()
-            .lineStyle(3, 0x55ff55, 1)
+            .lineStyle(3, 0xffffff, 1)
             .strokePoints(thumb.slider.endPoints);
 
         // 'valuechange' event
@@ -107,10 +112,10 @@ export default class LoadingScreen extends Phaser.Scene
         });
       
         this.table = table;
-        this.scrollerState = this.add.text(0, 0, 'Hey buddy');
-        ///////////////
-        var table = this.add.rexGridTable(50, 50, 1000, 800, this.config);
-      
+        this.scrollerState = this.add.text(100, 0, '');
+
+        /////// Element stuff
+              
         const logo = this.add.image(logoX,logoY, 'logo');
         logo.displayWidth = 70;
         logo.displayHeight = 70;
@@ -192,6 +197,5 @@ export default class LoadingScreen extends Phaser.Scene
     update() {
         this.scrollerState.setText(this.table.scroller.state + "\n" + this.table.tableOY);
     }
-    
-
 }
+

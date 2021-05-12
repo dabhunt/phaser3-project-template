@@ -35,6 +35,7 @@
   "dependencies": {
     "@proton/web-sdk": "^2.7.11",
     "collections": "^5.1.12",
-    "phaser": "^3.52.0"
+    "phaser": "^3.52.0",
+    "phaser3-rex-plugins": "^1.1.46"
   }
 }

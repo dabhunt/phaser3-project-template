@@ -179,13 +179,13 @@ export function CombineElements(elementInput, blueprintBonus)
 			//3 of 4 inputs you get back, and you get 4 of -1 rarity elements
 		}
 	}
-	if (FourOfAKind)
+	else if (FourOfAKind)
 	{
 		newValueScore = avgValueScore * (fourOfAKindMulti);
 		elementInput[0].CreateUnique();
 		CreateRandomElement(elementInput[0].rarity, newValueScore, elementInput[0].type, elementInput[0]);//create random element of same rarity, but shiny and with better stats
 	}
-	if (ThreeOfAKind)
+	else if (ThreeOfAKind)
 	{
 
 	}

@@ -7,6 +7,7 @@ import particle from '../assets/img/circle.png'
 import logoImg from '../assets/img/logo.png'
 import slotbg from '../assets/img/slot_background.png'
 import Anchor from 'phaser3-rex-plugins/plugins/anchor.js';
+import ElemBase from '../js/ElemBase';
 
 
 const Random = Phaser.Math.Between;
@@ -16,6 +17,7 @@ const COLOR_LIGHT = 0x7b5e57;
 const COLOR_DARK = 0x260e04;
 var logoX = 55;
 var logoY = 50;
+var ElemSlots = 150;
 const slidingDeceleration = 10000;
 const backDeceleration = 2000;
 export default class Main extends Phaser.Scene
@@ -38,24 +40,26 @@ export default class Main extends Phaser.Scene
     }
 
     create() {
+        //$.csv.function(csv, {options}, callback);
+
         var newCellObject = function (scene, cell) {
-            //var bg = scene.add.graphics()
-                //.fillStyle(0x555555)
-                //.fillRect(6, 6, 100 - 6, 100 - 6);
-            //var bg = scene.add.graphics().fill
             var bg = scene.add.image(50, 50, 'slot_background',cell.index+1).setScale(.5, .5);
             var txt = scene.add.text(5, 5, cell.index+1);
+            //var txt = scene.add.text(5, 5, cell.GetItems());
             var container = scene.add.container(0, 0, [bg, txt]);
+            bg.setInteractive();
             return container;
         }
+        this.input.on('pointerdown',this.startDrag,this);
         var onCellVisible = function (cell) {
             cell.setContainer(newCellObject(this, cell));
             //console.log('Cell ' + cell.index + ' visible');
         };
+        
         var table = this.add.rexGridTable(800, 350, 1100, 490, {
             cellWidth: 100,
             cellHeight: 100,
-            cellsCount: 150,
+            cellsCount: ElemSlots,
             columns: 10,
             cellVisibleCallback: onCellVisible.bind(this),
             clamplTableOXY: false
@@ -113,6 +117,26 @@ export default class Main extends Phaser.Scene
       
         this.table = table;
         this.scrollerState = this.add.text(100, 0, '');
+        const CANDIDATES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var GetRandomWord = function (min, max, candidates) {
+        if (candidates === undefined) {
+            candidates = CANDIDATES;
+        }
+        var count = (max === undefined) ? min : Phaser.Math.Between(min, max);
+        var word = '';
+        for (var j = 0; j < count; j++) {
+            word += Phaser.Utils.Array.GetRandom(candidates);
+        }
+        return word;
+    }
+
+    var CreateContent = function () {
+        var words = [];
+        for (var i = 0, cnt = Phaser.Math.Between(3, 20); i < cnt; i++) {
+            words.push(GetRandomWord(3, 10));
+        }
+        return words.join(' ');
+    }
 
         /////// Element stuff
               
@@ -192,8 +216,25 @@ export default class Main extends Phaser.Scene
     // Obsidian: new Elem("Obsidian", "Ob", 3, "Crystal", 0),
     // Tanzinite: new Elem("Tanzinite", "Ta", 4, "Crystal", 0),
     // Opal: new Elem("Opal", "Op", 4, "Crystal", 0),
+    }    
+    startDrag(pointer,targets)
+    {
+        this.input.on('pointerdown', this.startDrag,this);
+        this.dragObj = targets[0];
+        this.input.on('pointermove', this.doDrag,this);
+        this.input.on('pointerup', this.stopDrag,this);
     }
-
+    doDrag(pointer)
+    {
+        this.dragObj.x = pointer.x;
+        this.dragObj.y = pointer.y;
+    }
+    stopDrag()
+    {
+        this.input.on('pointerdown', this.startDrag,this);
+        this.input.off('pointermove', this.doDrag,this);
+        this.input.off('pointerup', this.stopDrag,this);
+    }
     update() {
         this.scrollerState.setText(this.table.scroller.state + "\n" + this.table.tableOY);
     }
